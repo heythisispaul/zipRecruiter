@@ -1,0 +1,18 @@
+{
+  "$schema": "https://dev.office.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "job-postings-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/jobPostings/JobPostingsWebPart.js",
+          "manifest": "./src/webparts/jobPostings/JobPostingsWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "JobPostingsWebPartStrings": "lib/webparts/jobPostings/loc/{locale}.js"
+  }
+}

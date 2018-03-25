@@ -1,0 +1,8 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "version": "1.4.0",
+    "libraryName": "zip-recruiter",
+    "libraryId": "8190ef89-3116-4cca-be5f-d1a885a683c0",
+    "environment": "spo"
+  }
+}
