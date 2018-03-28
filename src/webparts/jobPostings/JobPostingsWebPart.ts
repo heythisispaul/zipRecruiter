@@ -4,7 +4,9 @@ import { Version } from '@microsoft/sp-core-library';
 import {
   BaseClientSideWebPart,
   IPropertyPaneConfiguration,
-  PropertyPaneTextField
+  PropertyPaneTextField,
+  PropertyPaneToggle,
+  PropertyPaneSlider
 } from '@microsoft/sp-webpart-base';
 
 import * as strings from 'JobPostingsWebPartStrings';
@@ -14,6 +16,8 @@ import { IJobPostingsProps } from './components/IJobPostingsProps';
 export interface IJobPostingsWebPartProps {
   description: string;
   URL: string;
+  descriptionBox: boolean;
+  jobsNum: number;
 }
 
 export default class JobPostingsWebPart extends BaseClientSideWebPart<IJobPostingsWebPartProps> {
@@ -23,7 +27,9 @@ export default class JobPostingsWebPart extends BaseClientSideWebPart<IJobPostin
       JobPostings,
       {
         description: this.properties.description,
-        URL: this.properties.URL
+        URL: this.properties.URL,
+        descriptionBox: this.properties.descriptionBox,
+        jobsNum: this.properties.jobsNum
       }
     );
 
@@ -46,10 +52,22 @@ export default class JobPostingsWebPart extends BaseClientSideWebPart<IJobPostin
               groupName: strings.BasicGroupName,
               groupFields: [
                 PropertyPaneTextField('description', {
-                  label: strings.DescriptionFieldLabel
+                  label: "Title Text"
                 }),
                 PropertyPaneTextField('URL', {
                   label: "ZipRecruiter URL"
+                }),
+                PropertyPaneSlider('jobsNum', {
+                  label: "Number of Jobs to Display",
+                  max: 20,
+                  min: 1,
+                  step: 1,
+                  showValue: true
+                }),
+                PropertyPaneToggle('descriptionBox', {
+                  label: 'Show Descriptions',
+                  onText: 'On',
+                  offText: 'Off'
                 })
               ]
             }

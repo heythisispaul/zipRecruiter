@@ -18,9 +18,10 @@
     "group": { "default": "Other" },
     "title": { "default": "jobPostings" },
     "description": { "default": "jobPostings description" },
-    "officeFabricIconFontName": "Page",
+    "officeFabricIconFontName": "AddFriend",
     "properties": {
-      "description": "jobPostings"
+      "description": "Open Positions",
+      "toggle": true
     }
   }]
 }

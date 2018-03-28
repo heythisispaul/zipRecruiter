@@ -4,19 +4,29 @@
   .container {
     max-width: 700px;
     margin: 0px auto;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+  }
+
+  .jobCards {
+      max-width: 700px;
+      margin: 0px auto;
+      box-shadow: 0px 0px 6px #bfbebe;
+      margin-bottom: 10px;
   }
 
   .row {
     @include ms-Grid-row;
-    @include ms-fontColor-white;
-    background-color: $ms-color-themeDark;
-    padding: 20px;
+    padding: 10px;
+  }
+
+  .padder {
+    padding-left: 10px;
+    padding-right: 10px;
   }
 
   .column {
     @include ms-Grid-col;
-    @include ms-lg10;
+    @include ms-lg12;
     @include ms-xl8;
     @include ms-xlPush2;
     @include ms-lgPush1;
@@ -24,17 +34,29 @@
 
   .title {
     @include ms-font-xl;
-    @include ms-fontColor-white;
   }
 
   .subTitle {
     @include ms-font-l;
-    @include ms-fontColor-white;
   }
 
   .description {
     @include ms-font-l;
-    @include ms-fontColor-white;
+  }
+
+  .callToAction a {
+    text-decoration: none;
+    @include ms-font-xl;
+    @include ms-fontSize-s;
+  }
+
+  .moreJobs {
+    @include ms-font-xl;
+    text-decoration: none;
+  }
+
+  .linkText {
+    text-decoration: none;
   }
 
   .button {

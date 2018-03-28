@@ -1,23 +1,33 @@
 import * as React from 'react'
 import styles from './JobPostings.module.scss';
-interface JobCardProps {
-    name: string,
-   }
+import { IJobCardProps } from './IJobCardProps';
+import { Fabric } from 'office-ui-fabric-react/lib/Fabric';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
-const Configure: React.SFC = (props) => {
+const JobCard: React.SFC<IJobCardProps> = (props) => {
  return (
     <div className = { styles.jobPostings }>
-    <div className = { styles.container }>
+     <div className = { styles.jobCards }>
       <div className = { styles.row }>
-        <div className ={ styles.column }>
-          <div>
-            <span className = { styles.title }>Configure the webpart to get started.</span>
-          </div>
+        {/* <div className ={ styles.column }> */}
+          <div className={ styles.padder }>
+            <span className = "ms-font-m ms-fontWeight-semibold">{ props.title }<br></br></span>
+            <span className = "ms-font-s-plus"> { props.location }</span>
+            <div id="desc">
+                { props.descriptionBox == true ? <p className = "ms-font-xs">{ props.desc }</p> : null }
+            </div>
+
+          <a href={props.link} className={ styles.linkText }>
+        <div className={ styles.callToAction }>
+            <p> Learn more > </p>
+        </div>
+        </a>
+        </div>
         </div>
       </div>
     </div>
-  </div>  
- )
-}
+//   </div>  
+ );
+};
 
-export default Configure;
+export default JobCard;
