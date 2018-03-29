@@ -16,13 +16,91 @@ export default class JobPostings extends React.Component<IJobPostingsProps, IJob
     super(props);
     this.state = {
       jobs: [],
-      diff: 0
+      diff: 0,
+      complete: false,
+      errorCaught: false
     }
   }
+
+  getJobs() {
+    let id = uuid();
+    axios({
+      method: 'POST',
+      url: 'https://blooming-beyond-65689.herokuapp.com/' + id,
+      data: {
+        url: this.props.URL
+      }
+    })
+    .then((res) => {
+      let jobs = res.data.slice(0, this.props.jobsNum);
+      this.setState({
+        jobs: jobs,
+        diff: res.data.length - this.props.jobsNum,
+        complete: true
+      })
+    })
+    .catch((err) => {
+      console.log(err);
+      this.setState({
+        errorCaught: true
+      })
+    })
+  }
+
   public render(): React.ReactElement<IJobPostingsProps> {
     let jobsArr = this.state.jobs;
-    if (this.state.jobs.length == 0) {
+
+    // TODO: Make all these one SFC with one changing text based off conditions:
+    if (this.props.URL == "") {
+      return (
+        <div className = { styles.jobPostings }>
+          <div className = { styles.container }>
+            <div className = { styles.row }>
+              <div className ={ styles.column }>
+                <div id="noJobs">
+                  <h2 className="ms-font-xxl">Configure the webpart to get started.</h2>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        )
+    }
+
+    if (jobsArr.length == 0 && !this.state.complete) {
       return <Spinner size={ SpinnerSize.large }/>
+    }
+
+    if (jobsArr.length == 0 && this.state.complete) {
+      return (
+        <div className = { styles.jobPostings }>
+          <div className = { styles.container }>
+            <div className = { styles.row }>
+              <div className ={ styles.column }>
+                <div id="noJobs">
+                  <h2 className="ms-font-xxl">Sorry, no jobs available at this time</h2>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        )
+    }
+
+    if (this.state.errorCaught) {
+      return (
+        <div className = { styles.jobPostings }>
+          <div className = { styles.container }>
+            <div className = { styles.row }>
+              <div className ={ styles.column }>
+                <div id="noJobs">
+                  <h2 className="ms-font-xxl">Unfortunately we could not get any job information at this time.</h2>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        )
     }
 
     return (
@@ -35,7 +113,6 @@ export default class JobPostings extends React.Component<IJobPostingsProps, IJob
                 <h2 className="ms-font-xxl">{ this.props.description }</h2>
                 </div>
                 { jobsArr.map((e, i) => {
-                  console.log(jobsArr[i]);
                   return <JobCard
                   key={ i } 
                   title={ jobsArr[i].title }
@@ -48,7 +125,7 @@ export default class JobPostings extends React.Component<IJobPostingsProps, IJob
                   }) }
                 </div>
                 <div>
-                { this.state.diff > 0 ? <a href={ this.props.URL } className={ styles.linkText }><p className={ styles.moreJobs }>See { this.state.diff } more jobs ></p></a>:  null }
+                { this.state.diff > 0 ? <a href={ this.props.URL } className={ styles.linkText }><p className={ styles.moreJobs }>See { this.state.diff } more job{ this.state.diff == 1 ? null : 's' } ></p></a>:  null }
              </div>
             </div>
           </div>
@@ -57,23 +134,11 @@ export default class JobPostings extends React.Component<IJobPostingsProps, IJob
     )
   }
 
-  componentDidMount() : void {
-    console.log(this.props.jobsNum);
-    let id = uuid();
-    axios({
-      method: 'POST',
-      url: 'http://localhost:3000/' + id,
-      data: {
-        url: this.props.URL
-      }
-    })
-    .then((res) => {
-      let jobs = res.data.slice(0, this.props.jobsNum);
-      console.log(jobs);
-      this.setState({
-        jobs: jobs,
-        diff: res.data.length - this.props.jobsNum
-      })
-    })
+  componentDidMount(): void {
+    this.getJobs();
+  }
+
+  componentWillReceiveProps(props): void {
+    this.getJobs();
   }
 }
