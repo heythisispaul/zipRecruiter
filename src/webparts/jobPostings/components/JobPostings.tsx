@@ -1,5 +1,6 @@
 import * as React from 'react';
 import styles from './JobPostings.module.scss';
+import * as ReactDOM from 'react-dom';
 import { IJobPostingsProps } from './IJobPostingsProps';
 import { IJobPostingsState } from './IJobPostingsState'; 
 import { escape } from '@microsoft/sp-lodash-subset';
@@ -10,6 +11,7 @@ import {
   SpinnerSize
 } from 'office-ui-fabric-react/lib/Spinner';
 import * as uuid from 'uuid';
+import { DefaultButton, IButtonProps } from 'office-ui-fabric-react/lib/Button';
 
 export default class JobPostings extends React.Component<IJobPostingsProps, IJobPostingsState> {
   constructor(props) {
@@ -33,7 +35,7 @@ export default class JobPostings extends React.Component<IJobPostingsProps, IJob
     })
     .then((res) => {
       let jobs = res.data.slice(0, this.props.jobsNum);
-      this.setState({
+      return this.setState({
         jobs: jobs,
         diff: res.data.length - this.props.jobsNum,
         complete: true
@@ -47,11 +49,23 @@ export default class JobPostings extends React.Component<IJobPostingsProps, IJob
     })
   }
 
+  buttonText(): string {
+    return this.state.diff == 1 ? `See ${this.state.diff} More Job >` : `See ${this.state.diff} More Jobs >`
+  }
+
+  componentDidMount(): void {
+    this.getJobs();
+  }
+
+  componentWillReceiveProps(props): void {
+    this.getJobs();
+  }
+
   public render(): React.ReactElement<IJobPostingsProps> {
     let jobsArr = this.state.jobs;
 
     // TODO: Make all these one SFC with one changing text based off conditions:
-    if (this.props.URL == "") {
+    if (!this.props.URL) {
       return (
         <div className = { styles.jobPostings }>
           <div className = { styles.container }>
@@ -87,22 +101,6 @@ export default class JobPostings extends React.Component<IJobPostingsProps, IJob
         )
     }
 
-    if (this.state.errorCaught) {
-      return (
-        <div className = { styles.jobPostings }>
-          <div className = { styles.container }>
-            <div className = { styles.row }>
-              <div className ={ styles.column }>
-                <div id="noJobs">
-                  <h2 className="ms-font-xxl">Unfortunately we could not get any job information at this time.</h2>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        )
-    }
-
     return (
     <div className = { styles.jobPostings }>
       <div className = { styles.container }>
@@ -125,20 +123,12 @@ export default class JobPostings extends React.Component<IJobPostingsProps, IJob
                   }) }
                 </div>
                 <div>
-                { this.state.diff > 0 ? <a href={ this.props.URL } className={ styles.linkText }><p className={ styles.moreJobs }>See { this.state.diff } more job{ this.state.diff == 1 ? null : 's' } ></p></a>:  null }
+                { this.state.diff > 0 ? <a href={ this.props.URL }><div><DefaultButton primary={ true } text={ this.buttonText() } /></div></a>: null}
              </div>
             </div>
           </div>
         </div>
       </div>
     )
-  }
-
-  componentDidMount(): void {
-    this.getJobs();
-  }
-
-  componentWillReceiveProps(props): void {
-    this.getJobs();
   }
 }

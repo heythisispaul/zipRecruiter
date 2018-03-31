@@ -3,6 +3,10 @@ import styles from './JobPostings.module.scss';
 import { IJobCardProps } from './IJobCardProps';
 import { Fabric } from 'office-ui-fabric-react/lib/Fabric';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import {
+    ActionButton,
+    IButtonProps
+  } from 'office-ui-fabric-react/lib/Button';
 
 const JobCard: React.SFC<IJobCardProps> = (props) => {
  return (
@@ -17,7 +21,11 @@ const JobCard: React.SFC<IJobCardProps> = (props) => {
                     </div>
                     <a href={props.link} className={ styles.linkText }>
                     <div className={ styles.callToAction }>
-                        <p> Learn more > </p>
+                        <ActionButton
+                            data-automation-id='test'
+                            iconProps={ { iconName: 'ChevronRight' } }
+                            text="Learn More"
+                        />
                     </div>
                     </a>
                 </div>
