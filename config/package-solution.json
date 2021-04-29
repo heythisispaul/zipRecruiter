@@ -3,7 +3,7 @@
   "solution": {
     "name": "zip-recruiter-client-side-solution",
     "id": "8190ef89-3116-4cca-be5f-d1a885a683c0",
-    "version": "1.0.0.0",
+    "version": "1.0.0.2",
     "includeClientSideAssets": true
   },
   "paths": {

@@ -3,4 +3,5 @@ export interface IJobPostingsProps {
   URL: string;
   descriptionBox: boolean;
   jobsNum: number;
+  moreButtonUrl: string;
 }

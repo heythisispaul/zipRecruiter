@@ -18,6 +18,7 @@ export interface IJobPostingsWebPartProps {
   URL: string;
   descriptionBox: boolean;
   jobsNum: number;
+  moreButtonUrl: string;
 }
 
 export default class JobPostingsWebPart extends BaseClientSideWebPart<IJobPostingsWebPartProps> {
@@ -29,7 +30,8 @@ export default class JobPostingsWebPart extends BaseClientSideWebPart<IJobPostin
         description: this.properties.description,
         URL: this.properties.URL,
         descriptionBox: this.properties.descriptionBox,
-        jobsNum: this.properties.jobsNum
+        jobsNum: this.properties.jobsNum,
+        moreButtonUrl: this.properties.moreButtonUrl,
       }
     );
 
@@ -55,7 +57,10 @@ export default class JobPostingsWebPart extends BaseClientSideWebPart<IJobPostin
                   label: "Title Text"
                 }),
                 PropertyPaneTextField('URL', {
-                  label: "ZipRecruiter URL"
+                  label: "ZipRecruiter Widget URL"
+                }),
+                PropertyPaneTextField('moreButtonUrl', {
+                  label: "ZipRecruiter Company Page URL"
                 }),
                 PropertyPaneSlider('jobsNum', {
                   label: "Number of Jobs to Display",

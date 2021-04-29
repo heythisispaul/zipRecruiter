@@ -1,17 +1,15 @@
 import * as React from 'react';
 import styles from './JobPostings.module.scss';
-import * as ReactDOM from 'react-dom';
 import { IJobPostingsProps } from './IJobPostingsProps';
 import { IJobPostingsState } from './IJobPostingsState'; 
-import { escape } from '@microsoft/sp-lodash-subset';
+import parseZipRecruiterHtml from '../parseZipRecruiterHtml';
 import axios from 'axios';
 import JobCard from './JobCard';
 import {
   Spinner,
   SpinnerSize
 } from 'office-ui-fabric-react/lib/Spinner';
-import * as uuid from 'uuid';
-import { DefaultButton, IButtonProps } from 'office-ui-fabric-react/lib/Button';
+import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 
 export default class JobPostings extends React.Component<IJobPostingsProps, IJobPostingsState> {
   constructor(props) {
@@ -25,19 +23,15 @@ export default class JobPostings extends React.Component<IJobPostingsProps, IJob
   }
 
   getJobs() {
-    let id = uuid();
     axios({
-      method: 'POST',
-      url: 'https://blooming-beyond-65689.herokuapp.com/' + id,
-      data: {
-        url: this.props.URL
-      }
+      method: 'GET',
+      url: this.props.URL,
     })
     .then((res) => {
-      let jobs = res.data.slice(0, this.props.jobsNum);
+      const jobs = parseZipRecruiterHtml(res.data);
       return this.setState({
-        jobs: jobs,
-        diff: res.data.length - this.props.jobsNum,
+        jobs,
+        diff: jobs.length - this.props.jobsNum,
         complete: true
       })
     })
@@ -62,7 +56,8 @@ export default class JobPostings extends React.Component<IJobPostingsProps, IJob
   }
 
   public render(): React.ReactElement<IJobPostingsProps> {
-    let jobsArr = this.state.jobs;
+    const { jobs } = this.state;
+    const jobsArr = jobs.slice(0, this.props.jobsNum);
 
     // TODO: Make all these one SFC with one changing text based off conditions:
     if (!this.props.URL) {
@@ -81,11 +76,11 @@ export default class JobPostings extends React.Component<IJobPostingsProps, IJob
         )
     }
 
-    if (jobsArr.length == 0 && !this.state.complete) {
+    if (jobs.length == 0 && !this.state.complete) {
       return <Spinner size={ SpinnerSize.large }/>
     }
 
-    if (jobsArr.length == 0 && this.state.complete) {
+    if (jobs.length == 0 && this.state.complete) {
       return (
         <div className = { styles.jobPostings }>
           <div className = { styles.container }>
@@ -110,20 +105,20 @@ export default class JobPostings extends React.Component<IJobPostingsProps, IJob
               <div>
                 <h2 className="ms-font-xxl">{ this.props.description }</h2>
                 </div>
-                { jobsArr.map((e, i) => {
-                  return <JobCard
-                  key={ i } 
-                  title={ jobsArr[i].title }
-                  location={ jobsArr[i].location }
-                  desc={ jobsArr[i].desc }
+                { jobsArr.map((job) => (
+                  <JobCard
+                  key={ job.link } 
+                  title={ job.title }
+                  location={ job.location }
+                  desc={ job.desc }
                   descriptionBox={ this.props.descriptionBox }
-                  link={ jobsArr[i].link } 
-                  jobsNum={ this.props.jobsNum }
+                    link={ job.link } 
+                    jobsNum={ this.props.jobsNum }
                   />
-                  }) }
+                  )) }
                 </div>
                 <div>
-                { this.state.diff > 0 ? <a href={ this.props.URL }><div><DefaultButton primary={ true } text={ this.buttonText() } /></div></a>: null}
+                { this.state.diff > 0 ? <a target="_blank" href={ this.props.moreButtonUrl }><div><DefaultButton primary={ true } text={ this.buttonText() } /></div></a>: null}
              </div>
             </div>
           </div>

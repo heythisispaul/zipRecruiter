@@ -19,7 +19,7 @@ const JobCard: React.SFC<IJobCardProps> = (props) => {
                     <div id="desc">
                         { props.descriptionBox == true ? <p className = "ms-font-xs">{ props.desc }</p> : null }
                     </div>
-                    <a href={props.link} className={ styles.linkText }>
+                    <a href={props.link} target="_blank" className={ styles.linkText }>
                     <div className={ styles.callToAction }>
                         <ActionButton
                             data-automation-id='test'

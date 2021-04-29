@@ -1,6 +1,6 @@
 {
   "name": "zip-recruiter",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "private": true,
   "engines": {
     "node": ">=0.10.0"
@@ -21,6 +21,7 @@
     "@types/uuid": "^3.4.3",
     "@types/webpack-env": ">=1.12.1 <1.14.0",
     "axios": "^0.18.0",
+    "natives": "^1.1.6",
     "office-ui-fabric-react": "^5.70.0",
     "react": "15.6.2",
     "react-dom": "15.6.2",
